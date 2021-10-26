@@ -1,25 +1,30 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
+
 class ArticleModel {
   String? id;
   String? title;
   String? text;
   String? categoryId;
-  String? image;
+  List<String>? image;
+
   ArticleModel({
     this.id,
     this.title,
     this.text,
     this.categoryId,
     this.image,
-  });
+  }) {
+    if (image == null) image = [];
+  }
 
   ArticleModel copyWith({
     String? id,
     String? title,
     String? text,
     String? categoryId,
-    String? image,
+    List<String>? image,
   }) {
     return ArticleModel(
       id: id ?? this.id,
@@ -36,17 +41,17 @@ class ArticleModel {
       'title': title,
       'text': text,
       'categoryId': categoryId,
-      'image': image,
+      'image': image?.join(',') ?? '',
     };
   }
 
   factory ArticleModel.fromMap(Map<String, dynamic> map) {
     return ArticleModel(
-      id: map['id'],
-      title: map['title'],
-      text: map['text'],
-      categoryId: map['categoryId'],
-      image: map['image'],
+      id: map['id'] != null ? map['id'] : null,
+      title: map['title'] != null ? map['title'] : null,
+      text: map['text'] != null ? map['text'] : null,
+      categoryId: map['categoryId'] != null ? map['categoryId'] : null,
+      image: map['image'] != null ? map['image'].split(',') : null,
     );
   }
 
@@ -68,7 +73,7 @@ class ArticleModel {
         other.title == title &&
         other.text == text &&
         other.categoryId == categoryId &&
-        other.image == image;
+        listEquals(other.image, image);
   }
 
   @override

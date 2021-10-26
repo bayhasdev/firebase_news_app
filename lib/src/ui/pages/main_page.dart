@@ -54,7 +54,14 @@ class _MainPageState extends State<MainPage> {
                 ),
               ],
             ),
-            ButtonWidget(text: 'dd', onPressed: () => setState(() => val = '5'))
+            ButtonWidget(
+              text: 'dd',
+              onPressed: () {
+                for (var i = 0; i < 15; i++) {
+                  log(DateTime.now().microsecondsSinceEpoch.toString());
+                }
+              },
+            ),
           ],
         ),
       ),

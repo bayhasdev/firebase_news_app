@@ -1,10 +1,13 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app/src/core/enums/viewstate.dart';
 import 'package:news_app/src/core/models/article_model.dart';
 import 'package:news_app/src/core/models/base_provider.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:collection/collection.dart';
 
 class ArticleProvider extends BaseProvider<ArticleModel> {
   CollectionReference collection = FirebaseFirestore.instance.collection('articles');
@@ -35,13 +38,17 @@ class ArticleProvider extends BaseProvider<ArticleModel> {
     }
   }
 
-  Future<ArticleModel> add(ArticleModel item) async {
+  Future<ArticleModel> add(ArticleModel item, List images) async {
     try {
       setState(ViewState.busy);
+      item.image = await uploadImage(item, images);
+
       var res = await collection.add(articalToMap(item));
-      setState(ViewState.idle);
       item.id = res.id;
+
       dataList.insert(0, item);
+
+      setState(ViewState.idle);
       return item;
     } catch (err) {
       setState(ViewState.idle);
@@ -50,9 +57,12 @@ class ArticleProvider extends BaseProvider<ArticleModel> {
     }
   }
 
-  Future<void> update(ArticleModel item) async {
+  Future<void> update(ArticleModel item, List images) async {
     try {
       setState(ViewState.busy);
+
+      item.image = await uploadImage(item, images);
+
       await collection.doc(item.id).update(articalToMap(item));
       setState(ViewState.idle);
     } catch (err) {
@@ -73,6 +83,30 @@ class ArticleProvider extends BaseProvider<ArticleModel> {
       debugPrint(err.toString());
       rethrow;
     }
+  }
+
+  Future uploadImage(ArticleModel item, List images) async {
+    List<String> imageList = [];
+    for (final image in images) {
+      if (!(image is String)) {
+        String imagePath = image.path;
+        String ImageName = DateTime.now().microsecondsSinceEpoch.toString();
+        String imageExtention = imagePath.substring(imagePath.lastIndexOf("."));
+        firebase_storage.TaskSnapshot res =
+            await firebase_storage.FirebaseStorage.instance.ref('articles/$ImageName$imageExtention').putFile(File(image.path));
+        String url = await res.ref.getDownloadURL();
+        imageList.add(url);
+      } else {
+        imageList.add(image);
+      }
+    }
+    var deletedImage = item.image!.whereNot((element) => imageList.contains(element));
+    for (final deleltItem in deletedImage) {
+      log(deleltItem);
+      await firebase_storage.FirebaseStorage.instance.refFromURL('$deleltItem').delete();
+    }
+    item.image = imageList;
+    return imageList;
   }
 
   Map<String, Object?> articalToMap(ArticleModel item) {
