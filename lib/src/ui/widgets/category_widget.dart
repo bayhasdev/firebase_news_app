@@ -19,22 +19,22 @@ class CategorySingleItem extends StatelessWidget {
         },
         child: Stack(
           children: [
-            item.image == null ? Image.asset(kNoImage) : Image.memory(item.image!.bytes, fit: BoxFit.cover),
+            item.image == null ? Image.asset(kNoImage) : Image.memory(item.image!.bytes, fit: BoxFit.contain),
             Positioned(
               bottom: 0,
               left: 0,
               right: 0,
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 2, vertical: 6),
+                padding: EdgeInsets.symmetric(horizontal: 2, vertical: 4),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [Colors.black54, Colors.black45, Colors.transparent],
+                    colors: [Colors.black87, Colors.black45, Colors.black38, Colors.transparent],
                     begin: Alignment.bottomCenter,
                     end: Alignment.topCenter,
                   ),
                 ),
-                child: Text(item.name ?? '', style: context.textTheme.headline4!.copyWith(color: Colors.white)),
+                child: Text(item.name ?? '', style: context.textTheme.headline5!.copyWith(color: Colors.white)),
               ),
             ),
           ],

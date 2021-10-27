@@ -55,8 +55,9 @@ class _MainPageState extends State<MainPage> {
                     if (GlobalVar.checkListNotEmpty(categoryProvider.dataList))
                       Card(
                         child: SizedBox(
-                          height: 120,
+                          height: 100,
                           child: ListView(
+                            itemExtent: 90,
                             scrollDirection: Axis.horizontal,
                             children: categoryProvider.dataList
                                 .map((e) => CategorySingleItem(

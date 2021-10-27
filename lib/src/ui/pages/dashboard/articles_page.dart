@@ -51,7 +51,7 @@ class _ArticlesPageState extends State<ArticlesPage> {
                               context: context,
                               explainMsg: 'are you sure to DELETE?',
                               deleteFun: () async {
-                                // categoryProvider.delete(e);
+                                articleProvider.delete(e);
                               },
                             );
                           },

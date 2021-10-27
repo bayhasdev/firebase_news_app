@@ -52,7 +52,7 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
                     text: 'pick Image',
                     onPressed: () async {
                       final ImagePicker _picker = ImagePicker();
-                      final XFile? res = await _picker.pickImage(source: ImageSource.camera, imageQuality: 50);
+                      final XFile? res = await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
                       if (res != null) {
                         widget.item.image = Blob(await res.readAsBytes());
                         setState(() {});

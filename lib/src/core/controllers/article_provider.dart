@@ -98,6 +98,9 @@ class ArticleProvider extends BaseProvider<ArticleModel> {
   Future delete(ArticleModel item) async {
     try {
       setState(ViewState.busy);
+      for (final image in item.image!) {
+        await firebase_storage.FirebaseStorage.instance.refFromURL('$image').delete();
+      }
       await collection.doc(item.id).delete();
       loadArticles();
       setState(ViewState.idle);
