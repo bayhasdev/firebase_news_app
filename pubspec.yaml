@@ -34,9 +34,10 @@ dependencies:
   firebase_core: ^1.7.0
   firebase_storage: ^10.0.6
   flutter:
-    sdk: flutter
+    sdk: flutter 
   flutter_localizations:
     sdk: flutter
+  flutter_widget_from_html: ^0.8.1+1
   get_it: ^7.2.0
   google_fonts: ^2.1.0
   http: ^0.13.4

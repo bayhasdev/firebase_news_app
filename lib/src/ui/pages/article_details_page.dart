@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:news_app/src/config/themes/colors.dart';
 import 'package:news_app/src/core/models/article_model.dart';
 import 'package:news_app/src/utils/custom_widgets/image_slider_page.dart';
@@ -82,12 +83,32 @@ class ArticleDetailsPage extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                   context.addHeight(16),
-                  Text(
-                    article.text ?? '',
-                    style: context.textTheme.headline2,
-                    textAlign: TextAlign.center,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: HtmlWidget(
+                      article.text ?? '',
+                    ),
                   ),
-                  const Divider(),
+                  // Html(
+                  //   // data: article.text ?? '',
+                  //   data:
+                  //       ''' <p><b>I've noticed this year footballers have said their piece for Black History Month. I saw Paul Pogba and some others saying there shouldn't even be a Black History Month, but a humanity month instead. That's a great idealistic scenario, but it's not the scenario we live in.</b></p><p><br></p><p>I'm not coming out with gun fingers against <span style="color: rgb(255, 0, 0);">Pogba</span> or anything but I do see that attitude sometimes: 'oh, we shouldn't have a Black History Month' or that it's racist or it's bringing up the past. And I'm thinking, well... no.</p><p><br></p><p><br></p> ''',
+                  //   onCssParseError: (css, errors) {
+                  //     log(css);
+                  //     errors.forEach((element) {
+                  //       log(element.message);
+                  //     });
+                  //   },
+                  // ),
+
+                  // Html.fromDom(
+                  //   document: HtmlParser.parseHTML(article.text ?? ''),
+                  //   style: {
+                  //     '*': Style(color: Colors.black, fontSize: FontSize.rem(1.2), fontWeight: FontWeight.normal, lineHeight: LineHeight.rem(1.25)),
+                  //     'strong': Style(fontWeight: FontWeight.bold),
+                  //     'table,td,th': Style(border: Border.all(width: 1, color: Colors.grey.shade300, style: BorderStyle.solid)),
+                  //   },
+                  // ),
                 ],
               ),
             ),
