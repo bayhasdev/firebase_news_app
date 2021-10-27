@@ -12,13 +12,36 @@ import 'package:collection/collection.dart';
 class ArticleProvider extends BaseProvider<ArticleModel> {
   CollectionReference collection = FirebaseFirestore.instance.collection('articles');
 
-  ArticleProvider() {
-    loadArticles();
+  List<ArticleModel> publicArticalList = [];
+
+  Future loadPublicArtical({String? catId}) async {
+    try {
+      setState(ViewState.busy);
+      QuerySnapshot<Object?> res;
+      if (catId == null)
+        res = await collection.get();
+      else
+        res = await collection.where('categoryId', isEqualTo: FirebaseFirestore.instance.doc('categories/$catId')).get();
+      publicArticalList.clear();
+      for (var element in res.docs) {
+        Map<String, dynamic> res = element.data() as Map<String, dynamic>;
+        log('res : ${res.toString()}');
+        res['categoryId'] = (res['categoryId'] as DocumentReference).id;
+        ArticleModel art = ArticleModel.fromMap(res);
+        art.id = element.id;
+        publicArticalList.add(art);
+      }
+      setState(ViewState.idle);
+    } catch (err) {
+      setState(ViewState.idle);
+      debugPrint(err.toString());
+      rethrow;
+    }
   }
 
   Future loadArticles() async {
     try {
-      setState(ViewState.idle);
+      setState(ViewState.busy);
 
       QuerySnapshot<Object?> res = await collection.get();
       dataList.clear();

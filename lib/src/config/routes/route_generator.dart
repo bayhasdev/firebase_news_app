@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:news_app/src/ui/pages/article_details_page.dart';
 import 'package:news_app/src/ui/pages/dashboard/add_article_page.dart';
 import 'package:news_app/src/ui/pages/dashboard/add_category_page.dart';
 
@@ -22,6 +23,9 @@ class RouteGenerator {
 
       case AddArticlePage.routeName:
         return MaterialPageRoute(builder: (_) => AddArticlePage(args));
+
+      case ArticleDetailsPage.routeName:
+        return MaterialPageRoute(builder: (_) => ArticleDetailsPage(args));
 
       ////////////////{ image Route } ////////////////
       case ImageViewPage.routeName:

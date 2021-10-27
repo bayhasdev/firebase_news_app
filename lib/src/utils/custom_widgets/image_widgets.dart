@@ -10,8 +10,8 @@ import 'image_view_page.dart';
 
 class ImageView extends StatelessWidget {
   final dynamic image;
-  final double width;
-  final double height;
+  final double? width;
+  final double? height;
   final double imageWidth;
   final double imageHeight;
   final BoxFit fit;
@@ -21,14 +21,7 @@ class ImageView extends StatelessWidget {
   void onTapFun(BuildContext context) {}
 
   const ImageView(this.image,
-      {this.width = 100,
-      this.height = 150,
-      this.imageWidth = 300,
-      this.imageHeight = 400,
-      this.fit = BoxFit.cover,
-      this.onTap,
-      this.tapped = false,
-      Key? key})
+      {this.width, this.height, this.imageWidth = 300, this.imageHeight = 400, this.fit = BoxFit.cover, this.onTap, this.tapped = false, Key? key})
       : super(key: key);
 
   @override
@@ -70,33 +63,30 @@ class ImageView extends StatelessWidget {
         } else {
           url = GlobalVar.getImageUrl(image, width: imageWidth.toInt(), height: imageHeight.toInt(), crop: false);
         }
-        return Hero(
-          tag: image?.toString() ?? DateTime.now().toString(),
-          child: CachedNetworkImage(
-            width: width,
-            height: height,
-            imageUrl: url,
-            placeholder: (context, url) =>
-                Container(color: Colors.grey.shade200, width: width, height: height, child: const Center(child: CircularProgressIndicator())),
-            errorWidget: (context, url, error) => Image.asset(kNoImage, width: width, height: height),
-            imageBuilder: (context, imageProvider) {
-              return ClipRect(
-                child: Container(
-                  width: width,
-                  height: height,
-                  decoration: BoxDecoration(image: DecorationImage(image: imageProvider, fit: BoxFit.cover)),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                    child: Container(
-                      width: width,
-                      height: height,
-                      decoration: BoxDecoration(image: DecorationImage(image: imageProvider)),
-                    ),
+        return CachedNetworkImage(
+          width: width,
+          height: height,
+          imageUrl: url,
+          placeholder: (context, url) =>
+              Container(color: Colors.grey.shade200, width: width, height: height, child: const Center(child: CircularProgressIndicator())),
+          errorWidget: (context, url, error) => Image.asset(kNoImage, width: width, height: height),
+          imageBuilder: (context, imageProvider) {
+            return ClipRect(
+              child: Container(
+                width: width,
+                height: height,
+                decoration: BoxDecoration(image: DecorationImage(image: imageProvider, fit: BoxFit.cover)),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                  child: Container(
+                    width: width,
+                    height: height,
+                    decoration: BoxDecoration(image: DecorationImage(image: imageProvider, fit: fit)),
                   ),
                 ),
-              );
-            },
-          ),
+              ),
+            );
+          },
         );
       }
     }

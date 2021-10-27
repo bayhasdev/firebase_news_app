@@ -158,8 +158,7 @@ class _ImageSliderContentState extends State<ImageSliderContent> {
       builder: (BuildContext context, int index) {
         return PhotoViewGalleryPageOptions(
           imageProvider: _getImageProvider(widget.imageList[index]),
-          initialScale: PhotoViewComputedScale.contained * 0.8,
-          heroAttributes: PhotoViewHeroAttributes(tag: widget.imageList[index].toString()),
+          initialScale: PhotoViewComputedScale.contained * 1.0,
         );
       },
       itemCount: widget.imageList.length,
@@ -172,23 +171,10 @@ class _ImageSliderContentState extends State<ImageSliderContent> {
           ),
         ),
       ),
-      // backgroundDecoration: widget.backgroundDecoration,
-      // pageController: widget.pageController,
       onPageChanged: (index) {
         setState(() => activeImageIndex = index);
       },
     );
-    // return PageView.builder(
-    //   controller: controller,
-    //   itemCount: widget.imageList.length,
-    //   itemBuilder: (context, position) {
-    //     return PageViewTransition1(
-    //       child: _imageView(widget.imageList[position]),
-    //       currentPageValue: currentPageValue,
-    //       position: position,
-    //     );
-    //   },
-    // );
   }
 
   ImageProvider _getImageProvider(var image) {
@@ -198,140 +184,10 @@ class _ImageSliderContentState extends State<ImageSliderContent> {
     } else if (image is File) {
       imageProvider = FileImage(image);
     } else {
-      imageProvider = NetworkImage(GlobalVar.getImageUrl(image, height: 1200, width: 1200, crop: false));
+      imageProvider = NetworkImage(
+        image.startsWith('http') ? image : GlobalVar.getImageUrl(image, height: 1200, width: 675, crop: false),
+      );
     }
     return imageProvider;
-  }
-
-  // Widget _imageView(var image) {
-  //   var photoView = PhotoView(
-  //     heroAttributes: PhotoViewHeroAttributes(tag: image is File ? image.path : image ?? DateTime.now().toString()),
-  //     imageProvider: _getImageProvider(image),
-  //   );
-  //   return photoView;
-  // }
-}
-
-class PageViewTransition1 extends StatelessWidget {
-  final Widget child;
-  final double? currentPageValue;
-  final int? position;
-  const PageViewTransition1({required this.child, this.currentPageValue, this.position, Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    if (position == currentPageValue!.floor()) {
-      return Transform(
-        transform: Matrix4.identity()..rotateX(currentPageValue! - position!),
-        child: child,
-      );
-    } else if (position == currentPageValue!.floor() + 1) {
-      return Transform(
-        transform: Matrix4.identity()..rotateX(currentPageValue! - position!),
-        child: child,
-      );
-    } else {
-      return Container(
-        color: position! % 2 == 0 ? Colors.blue : Colors.pink,
-        child: child,
-      );
-    }
-  }
-}
-
-class PageViewTransition2 extends StatelessWidget {
-  final Widget child;
-  final double? currentPageValue;
-  final int? position;
-  const PageViewTransition2({required this.child, this.currentPageValue, this.position, Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    if (position == currentPageValue!.floor()) {
-      return Transform(
-        transform: Matrix4.identity()
-          ..rotateY(currentPageValue! - position!)
-          ..rotateZ(currentPageValue! - position!),
-        child: child,
-      );
-    } else if (position == currentPageValue!.floor() + 1) {
-      return Transform(
-        transform: Matrix4.identity()
-          ..rotateY(currentPageValue! - position!)
-          ..rotateZ(currentPageValue! - position!),
-        child: child,
-      );
-    } else {
-      return Container(
-        color: position! % 2 == 0 ? Colors.blue : Colors.pink,
-        child: child,
-      );
-    }
-  }
-}
-
-class PageViewTransition3 extends StatelessWidget {
-  final Widget child;
-  final double? currentPageValue;
-  final int? position;
-  const PageViewTransition3({required this.child, this.currentPageValue, this.position, Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    if (position == currentPageValue!.floor()) {
-      return Transform(
-        transform: Matrix4.identity()
-          ..setEntry(3, 2, 0.004)
-          ..rotateY(currentPageValue! - position!)
-          ..rotateZ(currentPageValue! - position!),
-        child: child,
-      );
-    } else if (position == currentPageValue!.floor() + 1) {
-      return Transform(
-        transform: Matrix4.identity()
-          ..setEntry(3, 2, 0.004)
-          ..rotateY(currentPageValue! - position!)
-          ..rotateZ(currentPageValue! - position!),
-        child: child,
-      );
-    } else {
-      return Container(
-        color: position! % 2 == 0 ? Colors.blue : Colors.pink,
-        child: child,
-      );
-    }
-  }
-}
-
-class PageViewTransition4 extends StatelessWidget {
-  final Widget child;
-  final double? currentPageValue;
-  final int? position;
-  const PageViewTransition4({required this.child, this.currentPageValue, this.position, Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    if (position == currentPageValue?.floor()) {
-      return Transform(
-        alignment: Alignment.center,
-        transform: Matrix4.identity()
-          ..setEntry(3, 2, 0.001)
-          ..rotateX(currentPageValue! - position!)
-          ..rotateY(currentPageValue! - position!)
-          ..rotateZ(currentPageValue! - position!),
-        child: child,
-      );
-    } else if (position == currentPageValue!.floor() + 1) {
-      return Transform(
-        alignment: Alignment.center,
-        transform: Matrix4.identity()
-          ..setEntry(3, 2, 0.001)
-          ..rotateX(currentPageValue! - position!)
-          ..rotateY(currentPageValue! - position!)
-          ..rotateZ(currentPageValue! - position!),
-        child: child,
-      );
-    } else {
-      return Container(
-        color: position! % 2 == 0 ? Colors.blue : Colors.pink,
-        child: child,
-      );
-    }
   }
 }
